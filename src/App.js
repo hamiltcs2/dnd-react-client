@@ -6,9 +6,9 @@ import Combat from './components/Combat';
 import Roll from './components/Roll';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 class App extends React.Component {
-  constructor() {
-    super();
-  }
+  // constructor() {
+  //   super();
+  // }
   render() {
     return(
     <Router>

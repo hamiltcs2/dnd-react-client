@@ -1,6 +1,5 @@
 import React from "react";
 import axios from 'axios';
-import { useState } from "react";
 class Combat extends React.Component {
     
     state = {
