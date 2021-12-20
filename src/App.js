@@ -4,6 +4,7 @@ import Combatants from "./components/Combatants";
 import CombatSelect from './components/CombatSelect';
 import Combat from './components/Combat';
 import Roll from './components/Roll';
+import Nav from './components/Nav';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 class App extends React.Component {
   // constructor() {
@@ -13,6 +14,7 @@ class App extends React.Component {
     return(
     <Router>
       <div className="App">
+        <Nav/>
         <Switch>
           <Route exact path={"/"} component={Home}/>
           <Route path={"/combatants"} component={Combatants}/>
