@@ -1,1 +1,2 @@
 /api/* https://dnd-react.herokuapp.com/api/:splat 200
+/api/combatantsList https://dnd-react.herokuapp.com/api/combatantsList/:splat 200
