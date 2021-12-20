@@ -18,7 +18,7 @@ class Roll extends React.Component {
         const search = this.props.location.search;
         const params = new URLSearchParams(search);
         const IDFromURL = Object.fromEntries(params.entries());
-        axios.get('https://dnd-react.herokuapp.com/api/roll', {
+        axios.get('api/roll', {
         params: {
             _id: IDFromURL._id
         }})
@@ -80,7 +80,7 @@ class Roll extends React.Component {
         };
 
         axios({
-          url: 'https://dnd-react.herokuapp.com/api/rollSave',
+          url: 'api/rollSave',
           method: 'POST',
           data: payload
         })

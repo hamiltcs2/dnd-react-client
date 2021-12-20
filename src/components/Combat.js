@@ -17,7 +17,7 @@ class Combat extends React.Component {
         const search = this.props.location.search;
         const params = new URLSearchParams(search);
         const IDFromURL = Object.fromEntries(params.entries());
-        axios.get('https://dnd-react.herokuapp.com/api/battle', {
+        axios.get('api/battle', {
             params: {
                 _id: IDFromURL._id
             }
@@ -67,7 +67,7 @@ class Combat extends React.Component {
         };
     
         axios({
-          url: 'https://dnd-react.herokuapp.com/api/battleSave',
+          url: 'api/battleSave',
           method: 'POST',
           data: payload
         })

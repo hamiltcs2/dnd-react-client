@@ -23,7 +23,7 @@ class Combatants extends React.Component {
       };
     
       getCombatant = () => {
-        axios.get('https://dnd-react.herokuapp.com/api/combatantsList')
+        axios.get('api/combatantsList')
         .then((response) => {
           const data = response.data;
           this.setState({posts:data});
@@ -65,7 +65,7 @@ class Combatants extends React.Component {
         };
     
         axios({
-          url: 'https://dnd-react.herokuapp.com/api/combatantSave',
+          url: 'api/combatantSave',
           method: 'POST',
           data: payload
         })

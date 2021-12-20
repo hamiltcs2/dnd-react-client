@@ -14,7 +14,7 @@ class CombatSelect extends React.Component {
     
       
       getCombatant = () => {
-        axios.get('https://dnd-react.herokuapp.com/api/combatantsList')
+        axios.get('api/combatantsList')
         .then((response) => {
           const data = response.data;
           this.setState({posts:data});
@@ -53,7 +53,7 @@ class CombatSelect extends React.Component {
         };
         
         axios({
-          url: 'https://dnd-react.herokuapp.com/api/battleSave',
+          url: 'api/battleSave',
           method: 'POST',
           data: payload
         })

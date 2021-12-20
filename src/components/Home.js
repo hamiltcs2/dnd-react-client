@@ -12,7 +12,7 @@ class Home extends React.Component {
       };
     
       getBlogPost = () => {
-        axios.get('https://dnd-react.herokuapp.com/api')
+        axios.get('api')
         .then((response) => {
           const data = response.data;
           this.setState({posts:data});
@@ -43,7 +43,7 @@ class Home extends React.Component {
         };
     
         axios({
-          url: 'https://dnd-react.herokuapp.com/api/save',
+          url: 'api/save',
           method: 'POST',
           data: payload
         })
