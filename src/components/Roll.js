@@ -37,9 +37,9 @@ class Roll extends React.Component {
           console.log(this.state.auto);
           console.log('Data has been received!!!');
         })
-        // .catch(() => {
-        //   alert('Error retrieving data!!!');
-        // });
+        .catch((err) => {
+          console.log(err);
+        });
       };
 
       handleChange(event, index) {

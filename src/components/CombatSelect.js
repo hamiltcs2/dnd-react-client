@@ -58,7 +58,11 @@ class CombatSelect extends React.Component {
           data: payload
         })
         .then((response) => {
-          window.location.href = response.data.redirect + `${response.data._id}`;
+          console.log(response.data.redirect);
+          console.log(response.data._id);
+          console.log(window.location);
+          console.log(window.location.href);
+          //window.location.href = response.data.redirect + `${response.data._id}`;
           console.log('Data has been sent to the server');
           //this.resetUserInputs();
           //this.getCombatant();
