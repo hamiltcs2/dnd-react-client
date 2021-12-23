@@ -17,11 +17,12 @@ class App extends React.Component {
         <Nav/>
         <Switch>
           <Route exact path={"/"} component={Home}/>
-          <Route path={"/combatants"} component={Combatants}/>
+          <Route exact path={"/combatants"} component={Combatants}/>
           {/* <Route path="/combatselect" render={(props) => <Roll {...props}/>}/> */}
-          <Route path={"/combatselect"} component={CombatSelect}/>
-          <Route path={"/roll"} component={Roll}/>
-          <Route path={"/battle"} component={Combat}/>
+          <Route exact path={"/combatselect"} component={CombatSelect}/>
+          {/* <Route exact path={"/rolls"} component={ () => <Roll />}/> */}
+          <Route exact path={"/rolls"} component={Roll}/>
+          <Route exact path={"/battle"} component={Combat}/>
         </Switch>
       </div>
     </Router>

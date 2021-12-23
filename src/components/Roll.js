@@ -18,7 +18,7 @@ class Roll extends React.Component {
         const search = this.props.location.search;
         const params = new URLSearchParams(search);
         const IDFromURL = Object.fromEntries(params.entries());
-        axios.get('api/roll', {
+        axios.get('https://dnd-react.herokuapp.com/api/roll', {
         params: {
             _id: IDFromURL._id
         }})

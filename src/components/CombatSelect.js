@@ -1,5 +1,6 @@
 import React from "react";
 import axios from 'axios';
+//import { useHistory } from "react-router-dom";
 class CombatSelect extends React.Component {
     
     state = {
@@ -64,6 +65,8 @@ class CombatSelect extends React.Component {
           console.log(window.location);
           console.log(window.location.href);
           window.location.href = response.data.redirect + `${response.data._id}`;
+          //let history = useHistory();
+          //history.push('/rolls');
           //window.location.href = window.location.origin + '/api/roll/?_id=' + `${response.data._id}`;
           //window.location.href = 'http://localhost:3000/roll/?_id=61c163f089de6d108d5b3209'
           //window.location.replace(window.location.origin + response.data.redirect + `${response.data._id}`);
