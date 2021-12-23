@@ -67,7 +67,7 @@ class CombatSelect extends React.Component {
           window.location.href = response.data.redirect + `${response.data._id}`;
           //let history = useHistory();
           //history.push('/rolls');
-          //window.location.href = window.location.origin + '/api/roll/?_id=' + `${response.data._id}`;
+          window.location.href = window.location.origin + '/rolls';
           //window.location.href = 'http://localhost:3000/roll/?_id=61c163f089de6d108d5b3209'
           //window.location.replace(window.location.origin + response.data.redirect + `${response.data._id}`);
           console.log('Data has been sent to the server');
