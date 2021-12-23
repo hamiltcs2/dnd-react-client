@@ -64,7 +64,7 @@ class CombatSelect extends React.Component {
           console.log(window.location.origin);
           console.log(window.location);
           console.log(window.location.href);
-          window.location.href = response.data.redirect + `${response.data._id}`;
+          //window.location.href = response.data.redirect + `${response.data._id}`;
           //let history = useHistory();
           //history.push('/rolls');
           window.location.href = window.location.origin + '/rolls';
