@@ -21,8 +21,8 @@ class App extends React.Component {
           {/* <Route path="/combatselect" render={(props) => <Roll {...props}/>}/> */}
           <Route exact path={"/combatselect"} component={CombatSelect}/>
           {/* <Route exact path={"/rolls"} component={ () => <Roll />}/> */}
-          <Route path={"/rolls"} component={Roll}/>
-          <Route path={"/battle"} component={Combat}/>
+          <Route exact path={"/rolls"} component={Roll}/>
+          <Route exact path={"/battle"} component={Combat}/>
         </Switch>
       </div>
     </Router>
