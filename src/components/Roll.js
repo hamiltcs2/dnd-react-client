@@ -1,73 +1,108 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios';
-class Roll extends React.Component {
+import { useHistory } from "react-router-dom";
+//class Roll extends React.Component {
+  const Roll = (props) => {
+    const history = useHistory();;  
+    // state = {
+    //     num: [],
+    //     fighters: [],
+    //     posts: [],
+    //     auto: []
+    //   };
     
-    state = {
-        num: [],
-        fighters: [],
-        posts: [],
-        auto: []
-      };
+      // componentDidMount = () => {
+      //   this.getRoll();
+      // };
     
-      componentDidMount = () => {
-        this.getRoll();
-      };
-    
-      
-      getRoll = () => {
-        const search = this.props.location.search;
-        const params = new URLSearchParams(search);
-        const IDFromURL = Object.fromEntries(params.entries());
-        axios.get('https://dnd-react.herokuapp.com/api/roll', {
+      const [num, setNum]=useState([]);
+      const [fighters]=useState([]);
+      let [posts, setPosts]=useState([]);
+      const [auto]=useState([]);
+      //getRoll = () => {
+      useEffect(() =>{
+        // const search = window.location.search;
+        // const params = new URLSearchParams(search);
+        console.log("hello there");
+        console.log(props.location.state)
+        // const IDFromURL = Object.fromEntries(params.entries());
+        axios.get('api/roll', {
         params: {
-            _id: IDFromURL._id
+           // _id: IDFromURL._id
+           _id: String(props.location.state)
         }})
         .then((response) => {
-        const data = response.data;
-          this.setState({posts:data.fighters});
-          console.log(this.state.posts);
-          for (var i = 0; i < this.state.posts.length; i++) {
-            this.state.num.push(0);
-            if(this.state.posts[i].combatantType === 'monster') {
-                this.state.auto.push(false);
+        //const data = response.data;
+          //this.setState({posts:data.fighters});
+          setPosts(response.data);
+          console.log(posts);
+          console.log("hello");
+          //console.log(this.state.posts);
+          //for (var i = 0; i < this.state.posts.length; i++) {
+          for (var i=0; i<posts.length; i++) {
+            num.push(0);
+            //this.state.num.push(0);
+            //if(this.state.posts[i].combatantType === 'monster') {
+            if(posts[i].combatantType === 'monster') {
+                //this.state.auto.push(false);
+                auto.push(false);
             } else {
-                this.state.auto.push(true);
+                //this.state.auto.push(true);
+                auto.push(true);
             }
           }
-          console.log(this.state.auto);
+          //console.log(this.state.auto);
           console.log('Data has been received!!!');
         })
         .catch((err) => {
           console.log(err);
         });
-      };
+      });
 
-      handleChange(event, index) {
-        //console.log("event is "+event.target.value)
-        //console.log("index is"+index)
-        let items = [...this.state.num];
-        let item = {...items[index]};
-        item = event.target.value;
+      //handleChange(event, index) {
+      const handleChange = (event, index) => {
+        //let items = [...this.state.num];
+        let items = num;
+        //let item = {...items[index]};
+        let item = num[index];
+        //item = event.target.value;
+        item = event;
         items[index]=item;
-        this.setState({num:items});
+        //this.setState({num:items});
+        setNum(items);
       };
 
-      submit = (event) => {
+      //submit = (event) => {
+      const submit = (event) => {
         event.preventDefault();
-        for (var i = 0; i < this.state.posts.length; i++) {
-            if (this.state.num[i] > 0) {
-                this.state.fighters.push({
-                    fighter_id: this.state.posts[i]._id,
-                    name: this.state.posts[i].name,
-                    roll: Number(this.state.num[i])
+        //for (var i = 0; i < this.state.posts.length; i++) {
+        for (var i=0; i<posts.length; i++) {
+            //if (this.state.num[i] > 0) {
+            if(num[i] > 0) {
+                // this.state.fighters.push({
+                //     fighter_id: this.state.posts[i]._id,
+                //     name: this.state.posts[i].name,
+                //     roll: Number(this.state.num[i])
+                // })
+                fighters.push({
+                  fighter_id: posts[i]._id,
+                  name: posts[i].name,
+                  roll: Number(num[i])
                 })
             } else {
-                var roll = this.state.posts[i].initiative + Math.floor(Math.random() *20) + 1;
-                this.state.fighters.push({
-                    fighter_id: this.state.posts[i]._id,
-                    name: this.state.posts[i].name,
-                    roll: roll
-                })  
+                //var roll = this.state.posts[i].initiative + Math.floor(Math.random() *20) + 1;
+                var roll = posts[i].initiative + Math.floor(Math.random() * 20) + 1;
+                // this.state.fighters.push({
+                //     fighter_id: this.state.posts[i]._id,
+                //     name: this.state.posts[i].name,
+                //     roll: roll
+                // })  
+                fighters.push({
+                  fighter_id: posts[i]._id,
+                  name: posts[i].name,
+                  roll: roll
+                })
             }
 
         }
@@ -75,7 +110,8 @@ class Roll extends React.Component {
         const params = new URLSearchParams(search);
         const IDFromURL = Object.fromEntries(params.entries());
         const payload = {
-            fighters: this.state.fighters,
+            //fighters: this.state.fighters,
+            fighters: fighters,
             battle_id: IDFromURL._id
         };
 
@@ -85,7 +121,8 @@ class Roll extends React.Component {
           data: payload
         })
         .then((response) => {
-            window.location.href = response.data.redirect + `${response.data._id}`;
+            //window.location.href = response.data.redirect + `${response.data._id}`;
+            history.push('/battle?_id='+response.data._id);
           console.log('Data has been sent to the server');
           //this.resetUserInputs();
           //this.getRoll();
@@ -96,16 +133,44 @@ class Roll extends React.Component {
     
     
       };
-      resetUserInputs = () => {
-        this.setState({
-          num: [],
-          fighters: []
-        })
-      };
-      displayCombatants = (posts) => {
-        if (!posts.length) return null;
-        return posts.map((post, index) => (
-          <tr key={index}>
+      // resetUserInputs = () => {
+      //   this.setState({
+      //     num: [],
+      //     fighters: []
+      //   })
+      // };
+      // displayCombatants = (posts) => {
+      // };
+      // <td class="actions">
+      //         <a a href="combatants/view?_id={{ this._id }}"><button  type="button" class="btn btn-primary">View</button></a>
+		  //       </td>
+
+        //JSX
+        return(
+    <div className="roll-container">
+      <form onSubmit={submit}>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Strength</th>
+                    <th>Dexterity</th>
+                    <th>Constitution</th>
+                    <th>Intelligence</th>
+                    <th>Wisdom</th>
+                    <th>Charisma</th>
+                    <th>Initiative</th>
+                    <th>Max HP</th>
+                    <th>Armor Class</th>
+                    <th>Passive Perception</th>
+                    <th>Combatant Type</th>
+                </tr>
+            </thead>
+            <tbody>
+              {/* {this.displayCombatants(this.state.posts)} */}
+              {/* {if (!posts.length) return null; */}
+        {posts.map((post, index) => (
+          <tr key={index} data={post}>
             <td>{post.name}</td>
             <td>{post.strength}</td>
             <td>{post.dexterity}</td>
@@ -127,8 +192,9 @@ class Roll extends React.Component {
                 min="1" 
                 step="1" 
                 placeholder="5"
-                value = {this.state.num[index] || ''}
-                onChange={(event) => this.handleChange(event, index)}
+                //value = {this.state.num[index] || ''}
+                //onChange={(event) => this.handleChange(event, index)}
+                onChange={() => handleChange(index)}
             /> 
             {/* ) : (
                  <div>auto</div>
@@ -136,43 +202,13 @@ class Roll extends React.Component {
             </div>
             </td>
           </tr>
-        ));
-      };
-      // <td class="actions">
-      //         <a a href="combatants/view?_id={{ this._id }}"><button  type="button" class="btn btn-primary">View</button></a>
-		  //       </td>
-
-      render() {
-        console.log('State: ', this.state)
-        //JSX
-        return(
-    <div className="roll-container">
-      <form onSubmit={this.submit}>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Strength</th>
-                    <th>Dexterity</th>
-                    <th>Constitution</th>
-                    <th>Intelligence</th>
-                    <th>Wisdom</th>
-                    <th>Charisma</th>
-                    <th>Initiative</th>
-                    <th>Max HP</th>
-                    <th>Armor Class</th>
-                    <th>Passive Perception</th>
-                    <th>Combatant Type</th>
-                </tr>
-            </thead>
-            <tbody>
-              {this.displayCombatants(this.state.posts)}
+        ))}
             </tbody>
         </table>
-        <button>Submit</button>
+        {/* <button>Submit</button> */}
+        <input type="submit" value="Submit"/>
       </form>
     </div>
         );
-      };
 }
 export default Roll;

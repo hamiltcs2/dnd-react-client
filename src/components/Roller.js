@@ -1,31 +1,44 @@
 import React from "react";
 import axios from 'axios';
-//import { useHistory } from "react-router-dom";
-class CombatSelectTemp extends React.Component {
+class Roller extends React.Component {
     
     state = {
         num: [],
         fighters: [],
         posts: [],
+        auto: []
       };
     
       componentDidMount = () => {
-        this.getCombatant();
+        this.getRoll();
       };
     
       
-      getCombatant = () => {
-        axios.get('api/combatantsList')
+      getRoll = () => {
+        const search = this.props.location.search;
+        const params = new URLSearchParams(search);
+        const IDFromURL = Object.fromEntries(params.entries());
+        axios.get('api/roll', {
+        params: {
+            _id: IDFromURL._id
+        }})
         .then((response) => {
-          const data = response.data;
-          this.setState({posts:data});
+        const data = response.data;
+          this.setState({posts:data.fighters});
+          console.log(this.state.posts);
           for (var i = 0; i < this.state.posts.length; i++) {
             this.state.num.push(0);
+            if(this.state.posts[i].combatantType === 'monster') {
+                this.state.auto.push(false);
+            } else {
+                this.state.auto.push(true);
+            }
           }
+          console.log(this.state.auto);
           console.log('Data has been received!!!');
         })
-        .catch(() => {
-          alert('Error retrieving data!!!');
+        .catch((err) => {
+          console.log(err);
         });
       };
 
@@ -41,38 +54,41 @@ class CombatSelectTemp extends React.Component {
 
       submit = (event) => {
         event.preventDefault();
-        console.log(this.state.num);
         for (var i = 0; i < this.state.posts.length; i++) {
-          if(this.state.num[i] > 0) {
-            for (var k = 0; k < this.state.num[i]; k++) {
-              this.state.fighters.push(this.state.posts[i]);
+            if (this.state.num[i] > 0) {
+                this.state.fighters.push({
+                    fighter_id: this.state.posts[i]._id,
+                    name: this.state.posts[i].name,
+                    roll: Number(this.state.num[i])
+                })
+            } else {
+                var roll = this.state.posts[i].initiative + Math.floor(Math.random() *20) + 1;
+                this.state.fighters.push({
+                    fighter_id: this.state.posts[i]._id,
+                    name: this.state.posts[i].name,
+                    roll: roll
+                })  
             }
-          }
+
         }
+        const search = this.props.location.search;
+        const params = new URLSearchParams(search);
+        const IDFromURL = Object.fromEntries(params.entries());
         const payload = {
-          fighters: this.state.fighters
+            fighters: this.state.fighters,
+            battle_id: IDFromURL._id
         };
-        
+
         axios({
-          url: 'api/battleSave',
+          url: 'api/rollSave',
           method: 'POST',
           data: payload
         })
         .then((response) => {
-          console.log(response.data.redirect);
-          console.log(response.data._id);
-          console.log(window.location.origin);
-          console.log(window.location);
-          console.log(window.location.href);
-          //window.location.href = response.data.redirect + `${response.data._id}`;
-          //let history = useHistory();
-          //history.push('/rolls');
-          window.location.href = window.location.origin + '/rolls';
-          //window.location.href = 'http://localhost:3000/roll/?_id=61c163f089de6d108d5b3209'
-          //window.location.replace(window.location.origin + response.data.redirect + `${response.data._id}`);
+            window.location.href = response.data.redirect + `${response.data._id}`;
           console.log('Data has been sent to the server');
           //this.resetUserInputs();
-          //this.getCombatant();
+          //this.getRoll();
         })
         .catch(() => {
           console.log('Internal server error');
@@ -80,7 +96,6 @@ class CombatSelectTemp extends React.Component {
     
     
       };
-    
       resetUserInputs = () => {
         this.setState({
           num: [],
@@ -104,17 +119,21 @@ class CombatSelectTemp extends React.Component {
             <td>{post.passive_perception}</td>
             <td>{post.combatantType}</td>
             <td>
-              <div className="form-input">
-                <input 
-                  type="number" 
-                  name='selected'
-                  min="1" 
-                  step="1" 
-                  placeholder="5"
-                  value = {this.state.num[index] || ''}
-                  onChange={(event) => this.handleChange(event, index)}
-                />
-              </div>
+            <div className="form-input">
+                {/* { this.state.auto[index] ? ( */}
+            <input
+                type="number" 
+                name='selected'
+                min="1" 
+                step="1" 
+                placeholder="5"
+                value = {this.state.num[index] || ''}
+                onChange={(event) => this.handleChange(event, index)}
+            /> 
+            {/* ) : (
+                 <div>auto</div>
+             )} */}
+            </div>
             </td>
           </tr>
         ));
@@ -127,7 +146,7 @@ class CombatSelectTemp extends React.Component {
         console.log('State: ', this.state)
         //JSX
         return(
-    <div className="combat-container">
+    <div className="roll-container">
       <form onSubmit={this.submit}>
         <table>
             <thead>
@@ -156,4 +175,4 @@ class CombatSelectTemp extends React.Component {
         );
       };
 }
-export default CombatSelectTemp;
+export default Roller;
