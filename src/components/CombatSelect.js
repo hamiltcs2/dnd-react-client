@@ -35,7 +35,7 @@ import { useHistory } from "react-router-dom";
         .catch(() => {
           alert('Error retrieving data!!!');
         });
-    }, []);
+    }, [num, posts.length]);
       
       // const getCombatant = () => {
         
@@ -53,6 +53,7 @@ import { useHistory } from "react-router-dom";
         items[index]=item;
         //this.setState({num:items});
         setNum(items);
+        //console.log(num);
       };
 
       //submit = (event) => {
@@ -147,6 +148,7 @@ import { useHistory } from "react-router-dom";
               {/* {displayCombatants(posts)} */}
               {/* if (!posters.length) return null; */}
         {/* posters.map((post, index) => ( */}
+          {console.log(posts.length)}
           {posts.map((post, index) => (
           <tr key={index} data={post}>
             <td>{post.name}</td>
@@ -172,7 +174,7 @@ import { useHistory } from "react-router-dom";
                   //value = {this.state.num[index] || ''}
                   //value = {num[index] || ''}
                   // onChange={(event) => this.handleChange(event, index)}
-                  onChange={() => handleChange(index)}
+                  onChange={e => handleChange(e.target.value, index)}
                 />
               </div>
             </td>

@@ -19,6 +19,7 @@ import { useHistory } from "react-router-dom";
       const [num, setNum]=useState([]);
       const [fighters]=useState([]);
       let [posts, setPosts]=useState([]);
+      let [id, setId]=useState("");
       const [auto]=useState([]);
       //getRoll = () => {
       useEffect(() =>{
@@ -35,16 +36,21 @@ import { useHistory } from "react-router-dom";
         .then((response) => {
         //const data = response.data;
           //this.setState({posts:data.fighters});
-          setPosts(response.data);
-          console.log(posts);
+          setPosts(response.data.fighters);
+          setId(response.data._id);
+          console.log(response.data);
+          console.log("yes");
+          console.log(response.skirmish);
+          //console.log(posts);
           console.log("hello");
           //console.log(this.state.posts);
           //for (var i = 0; i < this.state.posts.length; i++) {
-          for (var i=0; i<posts.length; i++) {
+          for (var i=0; i<response.data.fighters.length; i++) {
+            console.log(i);
             num.push(0);
             //this.state.num.push(0);
             //if(this.state.posts[i].combatantType === 'monster') {
-            if(posts[i].combatantType === 'monster') {
+            if(response.data.fighters[i].combatantType === 'monster') {
                 //this.state.auto.push(false);
                 auto.push(false);
             } else {
@@ -58,7 +64,7 @@ import { useHistory } from "react-router-dom";
         .catch((err) => {
           console.log(err);
         });
-      });
+      }, [auto, num, props.location.state]);
 
       //handleChange(event, index) {
       const handleChange = (event, index) => {
@@ -106,13 +112,13 @@ import { useHistory } from "react-router-dom";
             }
 
         }
-        const search = this.props.location.search;
-        const params = new URLSearchParams(search);
-        const IDFromURL = Object.fromEntries(params.entries());
+        // const search = this.props.location.search;
+        // const params = new URLSearchParams(search);
+        // const IDFromURL = Object.fromEntries(params.entries());
         const payload = {
             //fighters: this.state.fighters,
             fighters: fighters,
-            battle_id: IDFromURL._id
+            battle_id: id
         };
 
         axios({
@@ -194,7 +200,7 @@ import { useHistory } from "react-router-dom";
                 placeholder="5"
                 //value = {this.state.num[index] || ''}
                 //onChange={(event) => this.handleChange(event, index)}
-                onChange={() => handleChange(index)}
+                onChange={e => handleChange(e.target.value, index)}
             /> 
             {/* ) : (
                  <div>auto</div>
