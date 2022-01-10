@@ -6,6 +6,7 @@ import Combat from './components/Combat';
 import Roll from './components/Roll';
 import Nav from './components/Nav';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import './style/index.css';
 class App extends React.Component {
   // constructor() {
   //   super();
@@ -14,7 +15,9 @@ class App extends React.Component {
     return(
     <Router>
       <div className="App">
+      <header className="App-header">
         <Nav/>
+      </header>
         <Switch>
           <Route exact path={"/"} component={Home}/>
           <Route exact path={"/combatants"} component={Combatants}/>
