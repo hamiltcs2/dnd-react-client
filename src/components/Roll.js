@@ -155,7 +155,7 @@ import { useHistory } from "react-router-dom";
         return(
     <div className="roll-container">
       <form onSubmit={submit}>
-        <table>
+        <table className="content-table">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -170,6 +170,7 @@ import { useHistory } from "react-router-dom";
                     <th>Armor Class</th>
                     <th>Passive Perception</th>
                     <th>Combatant Type</th>
+                    <th>Roll</th>
                 </tr>
             </thead>
             <tbody>
@@ -211,8 +212,8 @@ import { useHistory } from "react-router-dom";
         ))}
             </tbody>
         </table>
-        {/* <button>Submit</button> */}
-        <input type="submit" value="Submit"/>
+        <button className="submit-button">Submit</button>
+        {/* <input className = "submit-button" type="submit" value="Submit"/> */}
       </form>
     </div>
         );

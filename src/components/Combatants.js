@@ -123,10 +123,11 @@ class Combatants extends React.Component {
         //JSX
         return(
           <div>
-            <h2>Add a new Combatant</h2>
             <form onSubmit={this.submit}>
+            <fieldset>
+            <legend>Add a new Combatant</legend>
               <div className="form-input">
-                Name: <input 
+                <label style={{marginTop:'0'}}>Name: </label><input 
                 type="text"
                 name="name"
                 placeholder="Name"
@@ -135,7 +136,7 @@ class Combatants extends React.Component {
                 />
               </div>
               <div className="form-input">
-                Strength: <input 
+              <label>Strength: </label><input 
                 type="number"
                 name="strength"
                 placeholder="Strength"
@@ -144,7 +145,7 @@ class Combatants extends React.Component {
                 />
               </div>
               <div className="form-input">
-                Dexterity: <input 
+              <label>Dexterity: </label><input 
                 type="number"
                 name="dexterity"
                 placeholder="Dexterity"
@@ -153,7 +154,7 @@ class Combatants extends React.Component {
                 />
               </div>
               <div className="form-input">
-                Constitution: <input 
+              <label>Constitution: </label><input 
                 type="number"
                 name="constitution"
                 placeholder="Constitution"
@@ -162,7 +163,7 @@ class Combatants extends React.Component {
                 />
               </div>
               <div className="form-input">
-                Intelligence: <input 
+              <label>Intelligence: </label><input 
                 type="number"
                 name="intelligence"
                 placeholder="Intelligence"
@@ -171,7 +172,7 @@ class Combatants extends React.Component {
                 />
               </div>
               <div className="form-input">
-                Wisdom: <input 
+              <label>Wisdom: </label><input 
                 type="number"
                 name="wisdom"
                 placeholder="Wisdom"
@@ -180,7 +181,7 @@ class Combatants extends React.Component {
                 />
               </div>
               <div className="form-input">
-                Charisma: <input 
+              <label>Charisma: </label><input 
                 type="number"
                 name="charisma"
                 placeholder="Charisma"
@@ -189,7 +190,7 @@ class Combatants extends React.Component {
                 />
               </div>
               <div className="form-input">
-                Initiiative: <input 
+              <label>Initiative: </label><input 
                 type="number"
                 name="initiative"
                 placeholder="Initiative"
@@ -198,7 +199,7 @@ class Combatants extends React.Component {
                 />
               </div>
               <div className="form-input">
-                Max HP: <input 
+              <label>Max HP: </label><input 
                 type="number"
                 name="max_hp"
                 placeholder="Max HP"
@@ -207,7 +208,7 @@ class Combatants extends React.Component {
                 />
               </div>
               <div className="form-input">
-                Armor Class: <input 
+              <label>Armor Class: </label><input 
                 type="number"
                 name="armor_class"
                 placeholder="Armor Class"
@@ -216,7 +217,7 @@ class Combatants extends React.Component {
                 />
               </div>
               <div className="form-input">
-                Passive Perception: <input 
+              <label>Passive Perception: </label><input 
                 type="number"
                 name="passive_perception"
                 placeholder="Passive Perception"
@@ -224,9 +225,10 @@ class Combatants extends React.Component {
                 onChange={this.handleChange}
                 />
               </div>
-              <div className="radio">
+              <div style={{margin:'1em 0 0 0'}}>
+              <div style={{marginLeft:'0'}} className="radio">
                   <label>
-                      <input
+                      <input 
                       type="radio"
                       value={this.state.combatantType}
                       checked={this.state.combatantType === 'Player'}
@@ -235,9 +237,9 @@ class Combatants extends React.Component {
                       Player
                   </label>
               </div>
-              <div className="radio">
+              <div style={{marginLeft:'1.5em', marginRight: '0'}} className="radio">
                   <label>
-                      <input
+                      <input 
                       type="radio"
                       value={this.state.combatantType}
                       checked={this.state.combatantType === 'Monster'}
@@ -246,7 +248,9 @@ class Combatants extends React.Component {
                       Monster
                   </label>
               </div>
-              <button>Submit</button>
+              </div>
+              <button className="submit-button" style={{margin:'1em 0'}}>Submit</button>
+              </fieldset>
             </form>
               <div className="combatants">
                 {this.displayCombatants(this.state.posts)}

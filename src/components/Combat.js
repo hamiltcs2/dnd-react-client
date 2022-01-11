@@ -124,7 +124,7 @@ class Combat extends React.Component {
               {this.displayCombatants(this.state.fighters)}
             </tbody>
         </table>
-        <button>Submit</button>
+        {/* <button>Submit</button> */}
       </form>
     </div>
         );
