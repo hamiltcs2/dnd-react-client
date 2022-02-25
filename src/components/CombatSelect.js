@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
+const monsters = require("dnd-api").Monsters;
 //class CombatSelect extends React.Component {
   const CombatSelect = () => {
     const history = useHistory();
@@ -23,6 +24,8 @@ import { useHistory } from "react-router-dom";
       axios.get('api/combatantsList')
         .then((response) => {
           //this.setState({posts:data});
+          const monstersResponse = await monsters.list();
+          console.log(monstersResponse);
           setPosts(response.data);
           // for (var i = 0; i < this.state.posts.length; i++) {
           //   this.state.num.push(0);
