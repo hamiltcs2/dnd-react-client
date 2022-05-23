@@ -57,7 +57,7 @@ import { GET_MONSTERS } from '../gql/Query';
         });
         axios({
           url: 'graphql',
-          method: 'GET',
+          method: 'POST',
           data: GET_MONSTERS
         })
         .then((response) => {
