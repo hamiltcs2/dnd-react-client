@@ -1,3 +1,2 @@
 /api/* https://asharbor-server.herokuapp.com/api/:splat 200
-/graphql https://dnd5eapi.co/graphql/:splat 200
 /*  /index.html  200
