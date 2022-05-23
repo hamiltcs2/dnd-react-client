@@ -1,32 +1,79 @@
-import React from "react";
 import axios from 'axios';
-class Combatants extends React.Component {
-    state = {
-        name: '',
-        strength: 0,
-        dexterity: 0,
-        constitution: 0,
-        intelligence: 0,
-        wisdom: 0,
-        charisma: 0,
-        initiative: 0,
-        max_hp: 0,
-        armor_class: 0,
-        passive_perception: 0,
-        combatantType: '',
-        posts: []
-      };
+import {useState, useEffect, React} from "react";
+// import { useQuery } from '@apollo/client';
+import { GET_MONSTERS } from '../gql/Query';
+// class Combatants extends React.Component {
+  const Combatants = () => {
+    // state = {
+    //     name: '',
+    //     strength: 0,
+    //     dexterity: 0,
+    //     constitution: 0,
+    //     intelligence: 0,
+    //     wisdom: 0,
+    //     charisma: 0,
+    //     initiative: 0,
+    //     max_hp: 0,
+    //     armor_class: 0,
+    //     passive_perception: 0,
+    //     combatantType: '',
+    //     posts: []
+    //   };
+    // const { loading, error, data } = useQuery(GET_MONSTERS);
+    //       console.log(loading);
+    //       console.log(error);
+    //       console.log(data);
+    const [combatant, setCombatant]=useState({
+      name: '',
+      strength: 0,
+      dexterity: 0,
+      constitution: 0,
+      intelligence: 0,
+      wisdom: 0,
+      charisma: 0,
+      initiative: 0,
+      max_hp: 0,
+      armor_class: 0,
+      passive_perception: 0,
+      combatantType: ''
+    });
+    const [posts, setPosts]=useState([]);
     
-      componentDidMount = () => {
-        //hello
-        this.getCombatant();
-      };
-    
-      getCombatant = () => {
+      // componentDidMount = () => {
+      //   this.getCombatant();
+      // };
+
+      useEffect(() => {      
         axios.get('api/combatantsList')
         .then((response) => {
           const data = response.data;
-          this.setState({posts:data});
+          // this.setState({posts:data});
+          setPosts(data);
+          console.log("Data is: " + data);
+          console.log('Data has been received!!!');
+        })
+        .catch(() => {
+          alert('Error retrieving data!!!');
+        });
+        axios({
+          url: 'graphql',
+          method: 'GET',
+          data: GET_MONSTERS
+        })
+        .then((response) => {
+          console.log(response);
+
+        }).catch((error) =>{
+          console.log("Error", error);
+        })
+      }, []);
+
+      const getCombatant = () => {
+        axios.get('api/combatantsList')
+        .then((response) => {
+          const data = response.data;
+          // this.setState({posts:data});
+          setPosts(data);
           console.log("Data is: " + data);
           console.log('Data has been received!!!');
         })
@@ -35,33 +82,42 @@ class Combatants extends React.Component {
         });
       }
     
-      handleChange = ({ target }) => {
-        const { name, value } = target;
+      // handleChange = ({ target }) => {
+      const handleChange = (event, value) => {
+        // const { name, value } = target;
     
-        this.setState({
-          [name]: value
+        // this.setState({
+        //   [name]: value
+        // })
+        setCombatant(previousState => {
+          return { ...previousState, [event]: value}
         })
       };
-      handleRadioButton(value) {
-        this.setState({
-          combatantType: value
-        });
+      // handleRadioButton(value) {
+      const handleRadioButton = (value) => {
+        // this.setState({
+        //   combatantType: value
+        // });
+        setCombatant(previousState => {
+          return { ...previousState, combatantType: value}
+        })
       }
-      submit = (event) => {
+      // submit = (event) => {
+        const submit = (event) => {
         event.preventDefault();
         const payload = {
-          name: this.state.name,
-          strength: this.state.strength,
-          dexterity: this.state.dexterity,
-          constitution: this.state.constitution,
-          intelligence: this.state.intelligence,
-          wisdom: this.state.wisdom,
-          charisma: this.state.charisma,
-          initiative: this.state.initiative,
-          max_hp: this.state.max_hp,
-          armor_class: this.state.armor_class,
-          passive_perception: this.state.passive_perception,
-          combatantType: this.state.combatantType
+          name: combatant.name,
+          strength: combatant.strength,
+          dexterity: combatant.dexterity,
+          constitution: combatant.constitution,
+          intelligence: combatant.intelligence,
+          wisdom: combatant.wisdom,
+          charisma: combatant.charisma,
+          initiative: combatant.initiative,
+          max_hp: combatant.max_hp,
+          armor_class: combatant.armor_class,
+          passive_perception: combatant.passive_perception,
+          combatantType: combatant.combatantType
         };
     
         axios({
@@ -71,8 +127,9 @@ class Combatants extends React.Component {
         })
         .then(() => {
           console.log('Data has been sent to the server');
-          this.resetUserInputs();
-          this.getCombatant();
+          // this.resetUserInputs();
+          resetUserInputs();
+          getCombatant();
         })
         .catch(() => {
           console.log('Internal server error');
@@ -81,24 +138,27 @@ class Combatants extends React.Component {
     
       };
     
-      resetUserInputs = () => {
-        this.setState({
-            name: '',
-            strength: 0,
-            dexterity: 0,
-            constitution: 0,
-            intelligence: 0,
-            wisdom: 0,
-            charisma: 0,
-            initiative: 0,
-            max_hp: 0,
-            armor_class: 0,
-            passive_perception: 0,
-            combatantType: ''
-        })
+      // resetUserInputs = () => {
+      const resetUserInputs = () => {
+        // this.setState({
+        setCombatant({
+          name: '',
+          strength: 0,
+          dexterity: 0,
+          constitution: 0,
+          intelligence: 0,
+          wisdom: 0,
+          charisma: 0,
+          initiative: 0,
+          max_hp: 0,
+          armor_class: 0,
+          passive_perception: 0,
+          combatantType: ''
+        });
       }
     
-      displayCombatants = (posts) => {
+      // displayCombatants = (posts) => {
+      const displayCombatants = (posts) => {
         if (!posts.length) return null;
         return posts.map((post, index) => (
           <div key={index}>
@@ -118,12 +178,13 @@ class Combatants extends React.Component {
         ));
       };
     
-      render() {
-        console.log('State: ', this.state)
+      // render() {
+        // console.log('State: ', this.state)
         //JSX
         return(
           <div>
-            <form onSubmit={this.submit}>
+            {/* <form onSubmit={this.submit}> */}
+            <form onSubmit={submit}>
             <fieldset>
             <legend>Add a new Combatant</legend>
               <div className="form-input">
@@ -131,8 +192,10 @@ class Combatants extends React.Component {
                 type="text"
                 name="name"
                 placeholder="Name"
-                value={this.state.name}
-                onChange={this.handleChange}
+                // value={this.state.name}
+                // onChange={this.handleChange}
+                value={combatant.name}
+                onChange={e => handleChange("name", e.target.value)}
                 />
               </div>
               <div className="form-input">
@@ -140,8 +203,10 @@ class Combatants extends React.Component {
                 type="number"
                 name="strength"
                 placeholder="Strength"
-                value={this.state.strength}
-                onChange={this.handleChange}
+                // value={this.state.strength}
+                // onChange={this.handleChange}
+                value={combatant.strength}
+                onChange={e => handleChange("strength", e.target.value)}
                 />
               </div>
               <div className="form-input">
@@ -149,8 +214,10 @@ class Combatants extends React.Component {
                 type="number"
                 name="dexterity"
                 placeholder="Dexterity"
-                value={this.state.dexterity}
-                onChange={this.handleChange}
+                // value={this.state.dexterity}
+                // onChange={this.handleChange}
+                value={combatant.dexterity}
+                onChange={e => handleChange("dexterity", e.target.value)}
                 />
               </div>
               <div className="form-input">
@@ -158,8 +225,10 @@ class Combatants extends React.Component {
                 type="number"
                 name="constitution"
                 placeholder="Constitution"
-                value={this.state.constitution}
-                onChange={this.handleChange}
+                // value={this.state.constitution}
+                // onChange={this.handleChange}
+                value={combatant.constitution}
+                onChange={e => handleChange("constitution", e.target.value)}
                 />
               </div>
               <div className="form-input">
@@ -167,8 +236,10 @@ class Combatants extends React.Component {
                 type="number"
                 name="intelligence"
                 placeholder="Intelligence"
-                value={this.state.intelligence}
-                onChange={this.handleChange}
+                // value={this.state.intelligence}
+                // onChange={this.handleChange}
+                value={combatant.intelligence}
+                onChange={e => handleChange("intelligence", e.target.value)}
                 />
               </div>
               <div className="form-input">
@@ -176,8 +247,10 @@ class Combatants extends React.Component {
                 type="number"
                 name="wisdom"
                 placeholder="Wisdom"
-                value={this.state.wisdom}
-                onChange={this.handleChange}
+                // value={this.state.wisdom}
+                // onChange={this.handleChange}
+                value={combatant.wisdom}
+                onChange={e => handleChange("wisdom", e.target.value)}
                 />
               </div>
               <div className="form-input">
@@ -185,8 +258,10 @@ class Combatants extends React.Component {
                 type="number"
                 name="charisma"
                 placeholder="Charisma"
-                value={this.state.charisma}
-                onChange={this.handleChange}
+                // value={this.state.charisma}
+                // onChange={this.handleChange}
+                value={combatant.charisma}
+                onChange={e => handleChange("charisma", e.target.value)}
                 />
               </div>
               <div className="form-input">
@@ -194,8 +269,10 @@ class Combatants extends React.Component {
                 type="number"
                 name="initiative"
                 placeholder="Initiative"
-                value={this.state.initiative}
-                onChange={this.handleChange}
+                // value={this.state.initiative}
+                // onChange={this.handleChange}
+                value={combatant.initiative}
+                onChange={e => handleChange("initiative", e.target.value)}
                 />
               </div>
               <div className="form-input">
@@ -203,8 +280,10 @@ class Combatants extends React.Component {
                 type="number"
                 name="max_hp"
                 placeholder="Max HP"
-                value={this.state.max_hp}
-                onChange={this.handleChange}
+                // value={this.state.max_hp}
+                // onChange={this.handleChange}
+                value={combatant.max_hp}
+                onChange={e => handleChange("max_hp", e.target.value)}
                 />
               </div>
               <div className="form-input">
@@ -212,8 +291,10 @@ class Combatants extends React.Component {
                 type="number"
                 name="armor_class"
                 placeholder="Armor Class"
-                value={this.state.armor_class}
-                onChange={this.handleChange}
+                // value={this.state.armor_class}
+                // onChange={this.handleChange}
+                value={combatant.armor_class}
+                onChange={e => handleChange("armor_class", e.target.value)}
                 />
               </div>
               <div className="form-input">
@@ -221,8 +302,10 @@ class Combatants extends React.Component {
                 type="number"
                 name="passive_perception"
                 placeholder="Passive Perception"
-                value={this.state.passive_perception}
-                onChange={this.handleChange}
+                // value={this.state.passive_perception}
+                // onChange={this.handleChange}
+                value={combatant.passive_perception}
+                onChange={e => handleChange("passive_perception", e.target.value)}
                 />
               </div>
               <div style={{margin:'1em 0 0 0'}}>
@@ -230,9 +313,12 @@ class Combatants extends React.Component {
                   <label>
                       <input 
                       type="radio"
-                      value={this.state.combatantType}
-                      checked={this.state.combatantType === 'Player'}
-                      onChange={() => this.handleRadioButton('Player')}
+                      // value={this.state.combatantType}
+                      // checked={this.state.combatantType === 'Player'}
+                      // onChange={() => this.handleRadioButton('Player')}
+                      value={combatant.combatantType}
+                      checked={combatant.combatantType === 'Player'}
+                      onChange={() => handleRadioButton('Player')}
                       />
                       Player
                   </label>
@@ -241,9 +327,12 @@ class Combatants extends React.Component {
                   <label>
                       <input 
                       type="radio"
-                      value={this.state.combatantType}
-                      checked={this.state.combatantType === 'Monster'}
-                      onChange={() => this.handleRadioButton('Monster')}
+                      // value={this.state.combatantType}
+                      // checked={this.state.combatantType === 'Monster'}
+                      // onChange={() => this.handleRadioButton('Monster')}
+                      value={combatant.combatantType}
+                      checked={combatant.combatantType === 'Monster'}
+                      onChange={() => handleRadioButton('Monster')}
                       />
                       Monster
                   </label>
@@ -253,10 +342,11 @@ class Combatants extends React.Component {
               </fieldset>
             </form>
               <div className="combatants">
-                {this.displayCombatants(this.state.posts)}
+                {/* {this.displayCombatants(this.state.posts)} */}
+                {displayCombatants(posts)}
               </div>
           </div> 
         );
-      };
+      // };
 }
 export default Combatants;

@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
-const monsters = require("dnd-api").Monsters;
+//const monsters = require("dnd-api").Monsters; NOT COMMENTED OUT ON LAST LOCAL RUN, NOT SURE WHAT i WAS WORKING ON BUT CAUSED ERROR!!
 //class CombatSelect extends React.Component {
   const CombatSelect = () => {
     const history = useHistory();
@@ -23,9 +23,8 @@ const monsters = require("dnd-api").Monsters;
       // getCombatant();
       axios.get('api/combatantsList')
         .then((response) => {
-          //this.setState({posts:data});
-          const monstersResponse = await monsters.list();
-          console.log(monstersResponse);
+          //const monstersResponse = await monsters.list(); NOT COMMENTED OUT ON LAST LOCAL RUN, NOT SURE WHAT i WAS WORKING ON BUT CAUSED ERROR!!
+          //console.log(monstersResponse); NOT COMMENTED OUT ON LAST LOCAL RUN, NOT SURE WHAT i WAS WORKING ON BUT CAUSED ERROR!!
           setPosts(response.data);
           // for (var i = 0; i < this.state.posts.length; i++) {
           //   this.state.num.push(0);
