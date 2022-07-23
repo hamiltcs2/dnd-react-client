@@ -1,7 +1,5 @@
 import axios from 'axios';
 import {useState, useEffect, React} from "react";
-// import { useQuery } from '@apollo/client';
-import { GET_MONSTERS } from '../gql/Query';
 // class Combatants extends React.Component {
   const Combatants = () => {
     // state = {
@@ -37,7 +35,23 @@ import { GET_MONSTERS } from '../gql/Query';
       passive_perception: 0,
       combatantType: ''
     });
+    const [query, setQuery]=useState({
+      name: '',
+      strength: 0,
+      dexterity: 0,
+      constitution: 0,
+      intelligence: 0,
+      wisdom: 0,
+      charisma: 0,
+      initiative: 0,
+      max_hp: 0,
+      armor_class: 0,
+      passive_perception: 0,
+      combatantType: ''
+    });
     const [posts, setPosts]=useState([]);
+    const [filteredPosts, setFilteredPosts]=useState([]);
+    const [queryRadio, setQueryRadio] = useState({Player: false, Monster: false});
     
       // componentDidMount = () => {
       //   this.getCombatant();
@@ -47,25 +61,14 @@ import { GET_MONSTERS } from '../gql/Query';
         axios.get('api/combatantsList')
         .then((response) => {
           const data = response.data;
-          // this.setState({posts:data});
+          setFilteredPosts(data);
           setPosts(data);
-          console.log("Data is: " + data);
+          // console.log("Data is: " + data);
           console.log('Data has been received!!!');
         })
         .catch(() => {
           alert('Error retrieving data!!!');
         });
-        axios({
-          url: 'graphql',
-          method: 'GET',
-          data: GET_MONSTERS
-        })
-        .then((response) => {
-          console.log(response);
-
-        }).catch((error) =>{
-          console.log("Error", error);
-        })
       }, []);
 
       const getCombatant = () => {
@@ -74,6 +77,7 @@ import { GET_MONSTERS } from '../gql/Query';
           const data = response.data;
           // this.setState({posts:data});
           setPosts(data);
+          //setFilteredPosts(data);
           console.log("Data is: " + data);
           console.log('Data has been received!!!');
         })
@@ -93,6 +97,32 @@ import { GET_MONSTERS } from '../gql/Query';
           return { ...previousState, [event]: value}
         })
       };
+
+      const handleQueryChange = (event, value) => {
+        if (value) {
+          if (queryRadio.Monster === true) {
+            let result = posts.filter(post => post.combatantType === "Monster");
+            result = result.filter(post => post.name.toUpperCase().includes(value.toUpperCase()));
+            setFilteredPosts(result);
+          }
+          else if (queryRadio.Player === true) {
+            let result = posts.filter(post => post.combatantType === "Player");
+            result = result.filter(post => post.name.toUpperCase().includes(value.toUpperCase()));
+            setFilteredPosts(result);
+          }
+          else {
+            const result = posts.filter(post => post.name.toUpperCase().includes(value.toUpperCase()));
+            setFilteredPosts(result);
+          }
+        }
+        else {
+          setFilteredPosts(posts);
+        }
+        setQuery(previousState => {
+          return { ...previousState, [event]: value}
+        })
+      };
+
       // handleRadioButton(value) {
       const handleRadioButton = (value) => {
         // this.setState({
@@ -102,6 +132,34 @@ import { GET_MONSTERS } from '../gql/Query';
           return { ...previousState, combatantType: value}
         })
       }
+
+      const handleQueryRadioButton = (e) => {
+        if (e) {
+            if (query.name) {
+              let result = posts.filter(post => post.combatantType === e.target.value);
+              result = result.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
+              setFilteredPosts(result);
+            }
+            else {
+              const result = posts.filter(post => post.combatantType === e.target.value);
+              setFilteredPosts(result);
+            }
+          }
+          else {
+            setFilteredPosts(posts);
+          }
+        setQuery(previousState => {
+          return { ...previousState, combatantType: e}
+        })
+        setQueryRadio(() => {
+          return {
+            Player: false,
+            Monster: false,
+            [e.target.value]: true
+          };
+        });
+      }
+
       // submit = (event) => {
         const submit = (event) => {
         event.preventDefault();
@@ -137,6 +195,10 @@ import { GET_MONSTERS } from '../gql/Query';
     
     
       };
+
+      const search = (event) => {
+        event.preventDefault();
+      }
     
       // resetUserInputs = () => {
       const resetUserInputs = () => {
@@ -158,9 +220,9 @@ import { GET_MONSTERS } from '../gql/Query';
       }
     
       // displayCombatants = (posts) => {
-      const displayCombatants = (posts) => {
-        if (!posts.length) return null;
-        return posts.map((post, index) => (
+      const displayCombatants = (filteredPosts) => {
+        if (!filteredPosts.length) return null;
+        return filteredPosts.map((post, index) => (
           <div key={index}>
             <h3>Name: {post.name}</h3>
             <p>Strength: {post.strength}</p>
@@ -341,9 +403,68 @@ import { GET_MONSTERS } from '../gql/Query';
               <button className="submit-button" style={{margin:'1em 0'}}>Submit</button>
               </fieldset>
             </form>
+            <form onSubmit={search}>
+            <fieldset>
+              <legend>Search</legend>
+              <div className="form-input">
+                <label style={{marginTop:'0'}}>Query: </label><input 
+                type="text"
+                name="query"
+                placeholder="Query"
+                value={query.name}
+                onChange={e => handleQueryChange("name", e.target.value)}
+                />
+              </div>
+              <div style={{margin:'1em 0 0 0'}}>
+              <div style={{marginLeft:'0'}} className="radio">
+                  <label>
+                      <input 
+                      type="radio"
+                      value="Player"
+                      checked={queryRadio.Player}
+                      onChange={handleQueryRadioButton}
+                      onClick={() => {
+                        setQueryRadio(() => ({ Monster: false, Player: false }));
+                        if (query.name) {
+                          const result = posts.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
+                          setFilteredPosts(result);
+                        }
+                        else {
+                          setFilteredPosts(posts);
+                        }
+                      }}
+                      />
+                      Player
+                  </label>
+              </div>
+              <div style={{marginLeft:'1.5em', marginRight: '0'}} className="radio">
+                  <label>
+                      <input 
+                      type="radio"
+                      value="Monster"
+                      checked={queryRadio.Monster}
+                      onChange={handleQueryRadioButton}
+                      onClick={() => {
+                        setQueryRadio(() => ({ Monster: false, Player: false }));
+                        if (query.name) {
+                          const result = posts.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
+                          setFilteredPosts(result);
+                        }
+                        else {
+                          setFilteredPosts(posts);
+                        }
+                      }}
+                      />
+                      Monster
+                  </label>
+              </div>
+              </div>
+              {/* <button className="submit-button" style={{margin:'1em 0'}}>Submit</button> */}
+            </fieldset>
+            </form>
               <div className="combatants">
                 {/* {this.displayCombatants(this.state.posts)} */}
-                {displayCombatants(posts)}
+                {displayCombatants(filteredPosts)}
               </div>
           </div> 
         );

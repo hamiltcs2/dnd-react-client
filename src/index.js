@@ -4,20 +4,18 @@ import './style/index.css';
 // import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {createStore} from "redux";
+import {Provider} from "react-redux";
+import rootReducer from "./redux/reducers";
 
-// const client = new ApolloClient({
-//   uri: "/graphql",
-//   fetchOptions: {
-//     mode: 'no-cors',
-//   },
-//   cache: new InMemoryCache()
-// });
+const store = createStore(rootReducer);
+
 ReactDOM.render(
-  // <ApolloProvider client={client}>
     <React.StrictMode>
+        <Provider store={store}>
         <App />
+      </Provider>
     </React.StrictMode>,
-  // </ApolloProvider>,
   document.getElementById('root')
 );
 
