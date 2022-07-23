@@ -34,7 +34,7 @@ import {useSelector} from "react-redux";
       pageCount: 0,
       currentData: []
     });
-    const [filteredPosts, setFilteredPosts]=useState([]);
+    // const [filteredPosts, setFilteredPosts]=useState([]);
     const [queryRadio, setQueryRadio] = useState({Player: false, Monster: false});
 
     const dispatch = useDispatch();
@@ -50,7 +50,7 @@ import {useSelector} from "react-redux";
       axios.get('api/combatantsList')
         .then((response) => {
           setPosts(response.data);
-          setFilteredPosts(response.data);
+          // setFilteredPosts(response.data);
           // setPagination({
           //   data: response.data,
           //   offset: 0,
@@ -125,7 +125,7 @@ import {useSelector} from "react-redux";
         if (queryRadio.Monster === true) {
           let result = posts.filter(post => post.combatantType === "Monster");
           result = result.filter(post => post.name.toUpperCase().includes(value.toUpperCase()));
-          setFilteredPosts(result);
+          // setFilteredPosts(result);
           setPagination((prevState) =>({
             ...prevState,
             data: result,
@@ -137,7 +137,7 @@ import {useSelector} from "react-redux";
         else if (queryRadio.Player === true) {
           let result = posts.filter(post => post.combatantType === "Player");
           result = result.filter(post => post.name.toUpperCase().includes(value.toUpperCase()));
-          setFilteredPosts(result);
+          // setFilteredPosts(result);
           setPagination((prevState) =>({
             ...prevState,
             data: result,
@@ -148,7 +148,7 @@ import {useSelector} from "react-redux";
         }
         else {
           const result = posts.filter(post => post.name.toUpperCase().includes(value.toUpperCase()));
-          setFilteredPosts(result);
+          // setFilteredPosts(result);
           setPagination((prevState) =>({
             ...prevState,
             data: result,
@@ -159,7 +159,7 @@ import {useSelector} from "react-redux";
         }
       }
       else {
-        setFilteredPosts(posts);
+        // setFilteredPosts(posts);
         setPagination((prevState) =>({
           ...prevState,
           data: posts,
@@ -178,7 +178,7 @@ import {useSelector} from "react-redux";
           if (query.name) {
             let result = posts.filter(post => post.combatantType === e.target.value);
             result = result.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
-            setFilteredPosts(result);
+            // setFilteredPosts(result);
             setPagination((prevState) =>({
               ...prevState,
               data: result,
@@ -189,7 +189,7 @@ import {useSelector} from "react-redux";
           }
           else {
             const result = posts.filter(post => post.combatantType === e.target.value);
-            setFilteredPosts(result);
+            // setFilteredPosts(result);
             setPagination((prevState) =>({
               ...prevState,
               data: result,
@@ -200,7 +200,7 @@ import {useSelector} from "react-redux";
           }
         }
         else {
-          setFilteredPosts(posts);
+          // setFilteredPosts(posts);
           setPagination((prevState) =>({
             ...prevState,
             data: posts,
@@ -289,7 +289,7 @@ import {useSelector} from "react-redux";
                       setQueryRadio(() => ({ Monster: false, Player: false }));
                       if (query.name) {
                         const result = posts.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
-                        setFilteredPosts(result);
+                        // setFilteredPosts(result);
                         setPagination((prevState) =>({
                           ...prevState,
                           data: result,
@@ -299,7 +299,7 @@ import {useSelector} from "react-redux";
                         }))
                       }
                       else {
-                        setFilteredPosts(posts);
+                        // setFilteredPosts(posts);
                         setPagination((prevState) =>({
                           ...prevState,
                           data: posts,
@@ -324,7 +324,7 @@ import {useSelector} from "react-redux";
                       setQueryRadio(() => ({ Monster: false, Player: false }));
                       if (query.name) {
                         const result = posts.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
-                        setFilteredPosts(result);
+                        // setFilteredPosts(result);
                         setPagination((prevState) =>({
                           ...prevState,
                           data: result,
@@ -334,7 +334,7 @@ import {useSelector} from "react-redux";
                         }))
                       }
                       else {
-                        setFilteredPosts(posts);
+                        // setFilteredPosts(posts);
                         setPagination((prevState) =>({
                           ...prevState,
                           data: posts,
