@@ -5,3 +5,9 @@ export const add_cart=(cart, count)=>{
         count:count
     }
 }
+export const remove_cart=(cart)=>{
+    return{
+        type:"remove_cart",
+        cart:cart
+    }
+}

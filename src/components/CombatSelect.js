@@ -4,8 +4,11 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { useHistory } from "react-router-dom";
 import {add_cart} from "../redux/setActions";
+import {remove_cart} from "../redux/setActions";
 import {useDispatch} from "react-redux";
 import {useSelector} from "react-redux";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
   const CombatSelect = () => {
     const history = useHistory();
     
@@ -24,27 +27,44 @@ import {useSelector} from "react-redux";
       combatantType: ''
     });
     const [num, setNum]=useState([]);
-    const [fighters]=useState([]);
-    let [posts, setPosts]=useState([]);
+    const [fighters, setFighters]=useState([]);
+    const [posts, setPosts]=useState([]);
+    // const [cartItems, setCartItems]=useState([]);
 
     const [pagination, setPagination] = useState({
       data: [],
       offset: 0,
       numberPerPage: 10,
       pageCount: 0,
-      currentData: []
+      currentData: [],
+      initialized: 0
     });
     // const [filteredPosts, setFilteredPosts]=useState([]);
     const [queryRadio, setQueryRadio] = useState({Player: false, Monster: false});
 
     const dispatch = useDispatch();
+
     const cart = useSelector(state => state.cart);
-    const counter = useSelector(state => state.count);
-    const addCart = (props, count) => {
-      dispatch(add_cart(props, count));
-      console.log("cart: ");
+
+
+    const addCart = (post) => {
+      let count = 0;
+      for (var i = 0; i<posts.length; i++) {
+        if (posts[i]._id === post._id) {
+          count = num[i][1];
+        }
+      }
+      dispatch(add_cart(post, count));
+      setFighters([]);
+      // console.log("cart: ");
+      // console.log(cart);
+      // console.log(posts);
+    }
+    const removeCart = (post) => {
       console.log(cart);
-      console.log(posts);
+      dispatch(remove_cart(post));
+      setFighters([]);
+      console.log(cart);
     }
     useEffect(() =>{
       axios.get('api/combatantsList')
@@ -58,15 +78,16 @@ import {useSelector} from "react-redux";
           //   pageCount: 0,
           //   currentData: []
           // });
-          setPagination((prevState) => ({
-            ...prevState,
-            data: response.data,
-            pageCount: response.data.length / prevState.numberPerPage,
-            // pageCount: Math.ceil(response.data.length / 10),
-            currentData: response.data.slice(pagination.offset, pagination.offset + pagination.numberPerPage)
-            // currentData: response.data.slice(0, 0 + pagination.numberPerPage)
-            // currentData: response.data.slice(0, 10)
-          }))
+          if (pagination.initialized === 0) {
+            setPagination((prevState) => 
+              ({...prevState,
+              data: response.data,
+              pageCount: response.data.length / prevState.numberPerPage,
+              currentData: response.data.slice(prevState.offset, prevState.offset + prevState.numberPerPage),
+              initialized: 1
+              }));
+          }
+        
           for (var i=0; i<response.data.length; i++) {
             num.push([response.data[i]._id, 0]);
           }
@@ -75,7 +96,7 @@ import {useSelector} from "react-redux";
         .catch((err) => {
           console.log(err);
         });
-    }, [num, posts.length, pagination.numberPerPage, pagination.offset]);
+    }, [num, posts.length, pagination.initialized]);
 
     const handlePageClick = event => {
       const selected = event.selected;
@@ -85,21 +106,46 @@ import {useSelector} from "react-redux";
       const offset = selected * pagination.numberPerPage;
       console.log(offset);
       console.log(pagination);
-      setPagination({ ...pagination, offset })
-    }
-
-    const carted = (post) => {
-      let count = 0;
-      for (var i = 0; i<posts.length; i++) {
-        if (posts[i]._id === post._id) {
-          count = num[i][1];
-        }
-      }
-      addCart(post, count);
+      setPagination({ ...pagination, 
+        offset: offset,
+        currentData: pagination.data.slice(offset, offset + pagination.numberPerPage) })
+      console.log(pagination);
     }
 
     const search = (event) => {
       event.preventDefault();
+      if (queryRadio.Monster === true) {
+        let result = posts.filter(post => post.combatantType === "Monster");
+        result = result.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
+        setPagination((prevState) =>({
+          ...prevState,
+          data: result,
+          offset: 0,
+          pageCount: result.length / prevState.numberPerPage,
+          currentData: result.slice(0, prevState.numberPerPage)
+        }))
+      }
+      else if (queryRadio.Player === true) {
+        let result = posts.filter(post => post.combatantType === "Player");
+        result = result.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
+        setPagination((prevState) =>({
+          ...prevState,
+          data: result,
+          offset: 0,
+          pageCount: result.length / prevState.numberPerPage,
+          currentData: result.slice(0, prevState.numberPerPage)
+        }))
+      }
+      else {
+        const result = posts.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
+        setPagination((prevState) =>({
+          ...prevState,
+          data: result,
+          offset: 0,
+          pageCount: result.length / prevState.numberPerPage,
+          currentData: result.slice(0, prevState.numberPerPage)
+        }))
+      }
     }
 
     const handleChange = (event, id) => {
@@ -122,51 +168,7 @@ import {useSelector} from "react-redux";
 
     const handleQueryChange = (event, value) => {
       if (value) {
-        if (queryRadio.Monster === true) {
-          let result = posts.filter(post => post.combatantType === "Monster");
-          result = result.filter(post => post.name.toUpperCase().includes(value.toUpperCase()));
-          // setFilteredPosts(result);
-          setPagination((prevState) =>({
-            ...prevState,
-            data: result,
-            offset: 0,
-            pageCount: result.length / prevState.numberPerPage,
-            currentData: result.slice(0, prevState.numberPerPage)
-          }))
-        }
-        else if (queryRadio.Player === true) {
-          let result = posts.filter(post => post.combatantType === "Player");
-          result = result.filter(post => post.name.toUpperCase().includes(value.toUpperCase()));
-          // setFilteredPosts(result);
-          setPagination((prevState) =>({
-            ...prevState,
-            data: result,
-            offset: 0,
-            pageCount: result.length / prevState.numberPerPage,
-            currentData: result.slice(0, prevState.numberPerPage)
-          }))
-        }
-        else {
-          const result = posts.filter(post => post.name.toUpperCase().includes(value.toUpperCase()));
-          // setFilteredPosts(result);
-          setPagination((prevState) =>({
-            ...prevState,
-            data: result,
-            offset: 0,
-            pageCount: result.length / prevState.numberPerPage,
-            currentData: result.slice(0, prevState.numberPerPage)
-          }))
-        }
-      }
-      else {
-        // setFilteredPosts(posts);
-        setPagination((prevState) =>({
-          ...prevState,
-          data: posts,
-          offset: 0,
-          pageCount: posts.length / prevState.numberPerPage,
-          currentData: posts.slice(0, prevState.numberPerPage)
-        }))
+
       }
       setQuery(previousState => {
         return { ...previousState, [event]: value}
@@ -175,42 +177,9 @@ import {useSelector} from "react-redux";
 
     const handleQueryRadioButton = (e) => {
       if (e) {
-          if (query.name) {
-            let result = posts.filter(post => post.combatantType === e.target.value);
-            result = result.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
-            // setFilteredPosts(result);
-            setPagination((prevState) =>({
-              ...prevState,
-              data: result,
-              offset: 0,
-              pageCount: result.length / prevState.numberPerPage,
-              currentData: result.slice(0, prevState.numberPerPage)
-            }))
-          }
-          else {
-            const result = posts.filter(post => post.combatantType === e.target.value);
-            // setFilteredPosts(result);
-            setPagination((prevState) =>({
-              ...prevState,
-              data: result,
-              offset: 0,
-              pageCount: result.length / prevState.numberPerPage,
-              currentData: result.slice(0, prevState.numberPerPage)
-            }))
-          }
-        }
-        else {
-          // setFilteredPosts(posts);
-          setPagination((prevState) =>({
-            ...prevState,
-            data: posts,
-            offset: 0,
-            pageCount: posts.length / prevState.numberPerPage,
-            currentData: posts.slice(0, prevState.numberPerPage)
-          }))
         }
       setQuery(previousState => {
-        return { ...previousState, combatantType: e}
+        return { ...previousState, combatantType: e.target.value}
       })
       setQueryRadio(() => {
         return {
@@ -222,6 +191,7 @@ import {useSelector} from "react-redux";
     }
     const submit = (event) => {
       event.preventDefault();
+      //OLD WAY OF SUBMITTING WITHOUT CART DO NOT DELETE
       // for (var i = 0; i< posts.length; i++) {
       //   if(num[i][1] > 0) {
       //       for(var k = 0; k < num[i][1]; k++) {
@@ -232,9 +202,7 @@ import {useSelector} from "react-redux";
       for(var i = 0; i < cart.length; i++) {
         for (var k = 0; k < posts.length; k++) {
           if (posts[k]._id === cart[i]._id) {
-            for (var j = 0; j < counter[i].count; j++) {
-              fighters.push(cart[i]);
-            }
+            fighters.push(cart[i]);
           }
         }
       }
@@ -265,6 +233,7 @@ import {useSelector} from "react-redux";
   
       return(
         <>
+        <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
         <form onSubmit={search}>
           <fieldset>
             <legend>Search</legend>
@@ -287,27 +256,6 @@ import {useSelector} from "react-redux";
                     onChange={handleQueryRadioButton}
                     onClick={() => {
                       setQueryRadio(() => ({ Monster: false, Player: false }));
-                      if (query.name) {
-                        const result = posts.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
-                        // setFilteredPosts(result);
-                        setPagination((prevState) =>({
-                          ...prevState,
-                          data: result,
-                          offset: 0,
-                          pageCount: result.length / prevState.numberPerPage,
-                          currentData: result.slice(0, prevState.numberPerPage)
-                        }))
-                      }
-                      else {
-                        // setFilteredPosts(posts);
-                        setPagination((prevState) =>({
-                          ...prevState,
-                          data: posts,
-                          offset: 0,
-                          pageCount: posts.length / prevState.numberPerPage,
-                          currentData: posts.slice(0, prevState.numberPerPage)
-                        }))
-                      }
                     }}
                     />
                     Player
@@ -322,39 +270,27 @@ import {useSelector} from "react-redux";
                     onChange={handleQueryRadioButton}
                     onClick={() => {
                       setQueryRadio(() => ({ Monster: false, Player: false }));
-                      if (query.name) {
-                        const result = posts.filter(post => post.name.toUpperCase().includes(query.name.toUpperCase()));
-                        // setFilteredPosts(result);
-                        setPagination((prevState) =>({
-                          ...prevState,
-                          data: result,
-                          offset: 0,
-                          pageCount: result.length / prevState.numberPerPage,
-                          currentData: result.slice(0, prevState.numberPerPage)
-                        }))
-                      }
-                      else {
-                        // setFilteredPosts(posts);
-                        setPagination((prevState) =>({
-                          ...prevState,
-                          data: posts,
-                          offset: 0,
-                          pageCount: posts.length / prevState.numberPerPage,
-                          currentData: posts.slice(0, prevState.numberPerPage)
-                        }))
-                      }
                     }}
                     />
                     Monster
                 </label>
             </div>
             </div>
-            {/* <button className="submit-button" style={{margin:'1em 0'}}>Submit</button> */}
+            <button className="submit-button" style={{margin:'1em 0'}}>Search</button>
+            {cart.map((item, index) => (
+          <div className="wrapList" key={index} data={item}>
+              <div className="cartListWrapper">
+                <span className="cartListTitle">{item.name}</span>
+                  <FontAwesomeIcon button onClick={function() {removeCart(item)}} className = "x" icon ={faWindowClose}/>
+                </div>
+          </div>
+          ))}
           </fieldset>
+          
           </form>
   <div className="combat-container">
-    {/* <form onSubmit={this.submit}> */}
     <form onSubmit={submit}>
+    <button type="submit" value="Submit" className="submit-button">Submit</button>
       <table className="content-table">
           <thead>
               <tr>
@@ -402,55 +338,18 @@ import {useSelector} from "react-redux";
             </div>
           </td>
           <td>
-            <button type="button" onClick={function() {carted(post)}} className="submit-button" style={{margin:'0'}}>Add to Cart</button>
+            <button type="button" onClick={function() {addCart(post)}} className="submit-button" style={{margin:'0'}}>Add to Cart</button>
           </td>
-            {/* <tr key={item.id} className="post">
-            <td>{item.title}</td>
-            <td>{item.id}</td>
-            <td>{item.body}</td> */}
             </tr>
           )))
           }
-        {/* {filteredPosts.map((post, index) => (
-        <tr key={index} data={post}>
-          <td>{post.name}</td>
-          <td>{post.strength}</td>
-          <td>{post.dexterity}</td>
-          <td>{post.constitution}</td>
-          <td>{post.intelligence}</td>
-          <td>{post.wisdom}</td>
-          <td>{post.charisma}</td>
-          <td>{post.initiative}</td>
-          <td>{post.max_hp}</td>
-          <td>{post.armor_class}</td>
-          <td>{post.passive_perception}</td>
-          <td>{post.combatantType}</td>
-          <td>
-            <div className="form-input">
-              <input 
-                type="number" 
-                name='selected'
-                min="1" 
-                step="1" 
-                placeholder="5"
-                onChange={e => handleChange(e.target.value, post._id)}
-              />
-            </div>
-          </td>
-          <td>
-            <button type="button" onClick={function() {carted(post)}} className="submit-button" style={{margin:'0'}}>Add to Cart</button>
-          </td>
-        </tr>
-      ))} */}
           </tbody>
       </table>
-      <input type="submit" value="Submit" className="submit-button"/>
     </form>
     <ReactPaginate
       previousLabel={'previous'}
       nextLabel={'next'}
       breakLabel={'...'}
-      // pageCount={pagination.pageCount}
       pageCount={Math.ceil(pagination.data.length/10)}
       marginPagesDisplayed={2}
       pageRangeDisplayed={5}
@@ -462,6 +361,5 @@ import {useSelector} from "react-redux";
   </div>
   </>
       );
-    //};
 }
 export default CombatSelect;

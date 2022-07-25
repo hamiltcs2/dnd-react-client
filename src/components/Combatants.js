@@ -149,7 +149,7 @@ import {useState, useEffect, React} from "react";
             setFilteredPosts(posts);
           }
         setQuery(previousState => {
-          return { ...previousState, combatantType: e}
+          return { ...previousState, combatantType: e.target.value}
         })
         setQueryRadio(() => {
           return {
