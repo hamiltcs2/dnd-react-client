@@ -112,6 +112,43 @@ legend {
   opacity: 1;
   z-index: -1;
 }
+.add-cart-button {
+  margin: 0 25px;
+  width: 75px;
+  height: 50px;
+  border: none;
+  background-color: #131515;
+  color: white;
+  border-radius: 4px;
+  transition: ease-out 0.3s;
+  font-size:1.2rem;
+  outline: none;
+  border: 3px solid #42FBF2;
+  position: relative;
+  z-index: 1;
+}
+.add-cart-button:hover{
+  color: #fff;
+  cursor: pointer;
+}
+.add-cart-button:before {
+  transition: 0.5s all ease;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: 50%;
+  bottom: 0;
+  opacity: 0;
+  content: "";
+  background-color: #42FBF2;
+}
+.add-cart-button:hover::before{
+  transition: 0.5s all ease;
+  left: 0;
+  right: 0;
+  opacity: 1;
+  z-index: -1;
+}
 .content-table {
   border-collapse: collapse;
   margin: 40px 25px;

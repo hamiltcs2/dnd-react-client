@@ -338,7 +338,7 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
             </div>
           </td>
           <td>
-            <button type="button" onClick={function() {addCart(post)}} className="submit-button" style={{margin:'0'}}>Add to Cart</button>
+            <button type="button" onClick={function() {addCart(post)}} className="add-cart-button" style={{margin:'0'}}>Add to Cart</button>
           </td>
             </tr>
           )))

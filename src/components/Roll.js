@@ -191,7 +191,7 @@ import { useHistory } from "react-router-dom";
             <td className="hide">{post.passive_perception}</td>
             <td className="hide">{post.combatantType}</td>
             <td>
-            <div className="form-input">
+            <div className="select-input">
                 {/* { this.state.auto[index] ? ( */}
             <input
                 type="number" 
