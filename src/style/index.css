@@ -127,9 +127,9 @@ legend {
   padding: 12px 15px;
 }
 .hide {
-  @media screen and (max-width: 767px) {
+  /* @media screen and (max-width: 767px) {
     visibility: hidden
-  }
+  } */
 }
 .content-table tbody tr {
   border-bottom: 1px solid #dddddd;
