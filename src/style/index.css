@@ -128,7 +128,7 @@ legend {
 }
 .hide {
   @media screen and (max-width: 767px) {
-    visibility: hidden
+    display: none
   }
 }
 .content-table tbody tr {
