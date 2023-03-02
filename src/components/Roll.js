@@ -160,7 +160,7 @@ import { useHistory } from "react-router-dom";
                 <tr>
                     <th>Name</th>
                     <th className="hide">Strength</th>
-                    <th>Dexterity</th>
+                    <th className="hide">Dexterity</th>
                     <th className="hide">Constitution</th>
                     <th className="hide">Intelligence</th>
                     <th className="hide">Wisdom</th>
@@ -180,7 +180,7 @@ import { useHistory } from "react-router-dom";
           <tr key={index} data={post}>
             <td>{post.name}</td>
             <td className="hide">{post.strength}</td>
-            <td>{post.dexterity}</td>
+            <td className="hide">{post.dexterity}</td>
             <td className="hide">{post.constitution}</td>
             <td className="hide">{post.intelligence}</td>
             <td className="hide">{post.wisdom}</td>

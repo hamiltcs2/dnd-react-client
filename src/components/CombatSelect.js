@@ -296,7 +296,7 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
               <tr>
                   <th>Name</th>
                   <th className="hide">Strength</th>
-                  <th>Dexterity</th>
+                  <th className="hide">Dexterity</th>
                   <th className="hide">Constitution</th>
                   <th className="hide">Intelligence</th>
                   <th className="hide">Wisdom</th>
@@ -307,7 +307,7 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
                   <th className="hide">Passive Perception</th>
                   <th className="hide">Combatant Type</th>
                   <th>Select</th>
-                  <th>Add to Cart</th>
+                  <th>Add</th>
               </tr>
           </thead>
           <tbody>
@@ -315,7 +315,7 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
             <tr key={index} data={post}>
             <td>{post.name}</td>
           <td className="hide">{post.strength}</td>
-          <td>{post.dexterity}</td>
+          <td className="hide">{post.dexterity}</td>
           <td className="hide">{post.constitution}</td>
           <td className="hide">{post.intelligence}</td>
           <td className="hide">{post.wisdom}</td>
@@ -338,7 +338,7 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
             </div>
           </td>
           <td>
-            <button type="button" onClick={function() {addCart(post)}} className="add-cart-button" style={{margin:'0'}}>Add to Cart</button>
+            <button type="button" onClick={function() {addCart(post)}} className="add-cart-button" style={{margin:'0'}}>Add</button>
           </td>
             </tr>
           )))
