@@ -45,7 +45,7 @@ legend {
 .select-input input {
   padding: .5em;
   border: solid 1px #999;
-  width: 20px;
+  width: 40px;
 }
 .radio {
   display: inline-block;

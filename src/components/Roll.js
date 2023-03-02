@@ -159,17 +159,17 @@ import { useHistory } from "react-router-dom";
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Strength</th>
+                    <th className="hide">Strength</th>
                     <th>Dexterity</th>
-                    <th>Constitution</th>
-                    <th>Intelligence</th>
-                    <th>Wisdom</th>
-                    <th>Charisma</th>
-                    <th>Initiative</th>
-                    <th>Max HP</th>
-                    <th>Armor Class</th>
-                    <th>Passive Perception</th>
-                    <th>Combatant Type</th>
+                    <th className="hide">Constitution</th>
+                    <th className="hide">Intelligence</th>
+                    <th className="hide">Wisdom</th>
+                    <th className="hide">Charisma</th>
+                    <th className="hide">Initiative</th>
+                    <th className="hide">Max HP</th>
+                    <th className="hide">Armor Class</th>
+                    <th className="hide">Passive Perception</th>
+                    <th className="hide">Combatant Type</th>
                     <th>Roll</th>
                 </tr>
             </thead>
