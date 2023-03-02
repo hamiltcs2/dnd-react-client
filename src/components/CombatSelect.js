@@ -314,16 +314,16 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
           {pagination.currentData && pagination.currentData.map(((post, index) => (
             <tr key={index} data={post}>
             <td>{post.name}</td>
-          <td className="hide">{post.strength}</td>
+          <td>{post.strength}</td>
           <td>{post.dexterity}</td>
-          <td className="hide">{post.constitution}</td>
-          <td className="hide">{post.intelligence}</td>
-          <td className="hide">{post.wisdom}</td>
-          <td className="hide">{post.charisma}</td>
+          <td>{post.constitution}</td>
+          <td>{post.intelligence}</td>
+          <td>{post.wisdom}</td>
+          <td>{post.charisma}</td>
           <td>{post.initiative}</td>
-          <td className="hide">{post.max_hp}</td>
-          <td className="hide">{post.armor_class}</td>
-          <td className="hide">{post.passive_perception}</td>
+          <td>{post.max_hp}</td>
+          <td>{post.armor_class}</td>
+          <td>{post.passive_perception}</td>
           <td>{post.combatantType}</td>
           <td>
             <div className="form-input">
