@@ -301,11 +301,11 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
                   <th className="hide">Intelligence</th>
                   <th className="hide">Wisdom</th>
                   <th className="hide">Charisma</th>
-                  <th>Initiative</th>
+                  <th className="hide">Initiative</th>
                   <th className="hide">Max HP</th>
                   <th className="hide">Armor Class</th>
                   <th className="hide">Passive Perception</th>
-                  <th>Combatant Type</th>
+                  <th className="hide">Combatant Type</th>
                   <th>Select</th>
                   <th>Add to Cart</th>
               </tr>
