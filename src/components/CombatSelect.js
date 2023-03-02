@@ -295,16 +295,16 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
           <thead>
               <tr>
                   <th>Name</th>
-                  {/* <th>Strength</th> */}
+                  <th>Strength</th>
                   <th>Dexterity</th>
-                  {/* <th>Constitution</th>
+                  <th>Constitution</th>
                   <th>Intelligence</th>
                   <th>Wisdom</th>
                   <th>Charisma</th>
                   <th>Initiative</th>
                   <th>Max HP</th>
                   <th>Armor Class</th>
-                  <th>Passive Perception</th> */}
+                  <th>Passive Perception</th>
                   <th>Combatant Type</th>
                   <th>Select</th>
                   <th>Add to Cart</th>
@@ -314,16 +314,16 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
           {pagination.currentData && pagination.currentData.map(((post, index) => (
             <tr key={index} data={post}>
             <td>{post.name}</td>
-          {/* <td>{post.strength}</td> */}
+          <td className="hide">{post.strength}</td>
           <td>{post.dexterity}</td>
-          {/* <td>{post.constitution}</td>
-          <td>{post.intelligence}</td>
-          <td>{post.wisdom}</td>
-          <td>{post.charisma}</td>
+          <td className="hide">{post.constitution}</td>
+          <td className="hide">{post.intelligence}</td>
+          <td className="hide">{post.wisdom}</td>
+          <td className="hide">{post.charisma}</td>
           <td>{post.initiative}</td>
-          <td>{post.max_hp}</td>
-          <td>{post.armor_class}</td>
-          <td>{post.passive_perception}</td> */}
+          <td className="hide">{post.max_hp}</td>
+          <td className="hide">{post.armor_class}</td>
+          <td className="hide">{post.passive_perception}</td>
           <td>{post.combatantType}</td>
           <td>
             <div className="form-input">
